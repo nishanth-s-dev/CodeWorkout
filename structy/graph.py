@@ -1,4 +1,5 @@
 from collections import deque, defaultdict
+from itertools import count
 
 
 def dfs(graph, start):
@@ -76,13 +77,48 @@ def get_adjacency_list(edges):
             graph[second_node].append(first_node)
     return dict(graph)
 
+# https://www.structy.net/problems/connected-components-count
+def connected_components_count(graph):
+  visited = set()
+  count = 0
+  for node in graph.keys():
+      count += traverse(node, graph, visited)
+  return count
 
-if __name__ == "__main__":
-    edges = [
-        ('i', 'j'),
-        ('k', 'i'),
-        ('m', 'k'),
-        ('k', 'l'),
-        ('o', 'n')
-    ]
-    print(undirected_path(edges, 'i', 'n'))
+def traverse(node, graph, visited):
+    if node in visited:
+        return 0
+
+    stack = [node]
+    while stack:
+        current = stack.pop(0)
+        visited.add(current)
+
+        neighbors = graph[current]
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                stack.append(neighbor)
+
+    return 1
+
+
+# count = connected_components_count({
+#   0: [8, 1, 5],
+#   1: [0],
+#   5: [0, 8],
+#   8: [0, 5],
+#   2: [3, 4],
+#   3: [2, 4],
+#   4: [3, 2]
+# }) # -> 2
+
+count = connected_components_count({
+  1: [2],
+  2: [1,8],
+  6: [7],
+  9: [8],
+  7: [6, 8],
+  8: [9, 7, 2]
+}) # -> 1
+
+print(count)
