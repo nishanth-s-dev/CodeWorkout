@@ -88,6 +88,15 @@ def connected_components_count(graph):
 def traverse(node, graph, visited):
     if node in visited:
         return 0
+    neighbors = graph[node]
+    visited.add(node)
+    for neighbor in neighbors:
+        traverse(neighbor, graph, visited)
+    return 1
+
+def traverse(node, graph, visited):
+    if node in visited:
+        return 0
 
     stack = [node]
     while stack:
