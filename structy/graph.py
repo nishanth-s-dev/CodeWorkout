@@ -135,6 +135,22 @@ def explore(node, graph, visited):
             queue.append(neighbor)
     return count
 
+def largest_component(graph):
+    visited = set()
+    largest = 0
+    for node in graph.keys():
+        largest = max(largest, explore(node, graph, visited))
+    return largest
+
+def explore(node, graph, visited):
+    if node in visited:
+        return 0
+    size = 1
+    visited.add(node)
+    for neighbor in graph[node]:
+        size += explore(neighbor, graph, visited)
+    return size
+
 graph = {
   0: [8, 1, 5],
   1: [0],
