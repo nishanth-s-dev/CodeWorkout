@@ -1,5 +1,4 @@
 from collections import deque, defaultdict
-from itertools import count
 
 
 def dfs(graph, start):
@@ -110,24 +109,40 @@ def traverse(node, graph, visited):
 
     return 1
 
+# https://www.structy.net/problems/largest-component
+def largest_component(graph):
+    visited = set()
+    count = 0
+    for node, neighbors in graph.items():
+        count = max(explore(node, graph, visited), count)
+    return count
 
-# count = connected_components_count({
-#   0: [8, 1, 5],
-#   1: [0],
-#   5: [0, 8],
-#   8: [0, 5],
-#   2: [3, 4],
-#   3: [2, 4],
-#   4: [3, 2]
-# }) # -> 2
+def explore(node, graph, visited):
+    if node in visited:
+        return 0
+    count = 0
 
-count = connected_components_count({
-  1: [2],
-  2: [1,8],
-  6: [7],
-  9: [8],
-  7: [6, 8],
-  8: [9, 7, 2]
-}) # -> 1
+    queue = deque([node])
+    while queue:
+        current = queue.popleft()
+        if current in visited:
+            continue
+        count += 1
+        visited.add(current)
 
+        neighbors = graph[current]
+        for neighbor in neighbors:
+            queue.append(neighbor)
+    return count
+
+graph = {
+  0: [8, 1, 5],
+  1: [0],
+  5: [0, 8],
+  8: [0, 5],
+  2: [3, 4],
+  3: [2, 4],
+  4: [3, 2]
+}
+count = largest_component(graph)
 print(count)
