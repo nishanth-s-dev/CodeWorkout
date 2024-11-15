@@ -76,13 +76,15 @@ def get_adjacency_list(edges):
             graph[second_node].append(first_node)
     return dict(graph)
 
+
 # https://www.structy.net/problems/connected-components-count
 def connected_components_count(graph):
-  visited = set()
-  count = 0
-  for node in graph.keys():
-      count += traverse(node, graph, visited)
-  return count
+    visited = set()
+    count = 0
+    for node in graph.keys():
+        count += traverse(node, graph, visited)
+    return count
+
 
 def traverse(node, graph, visited):
     if node in visited:
@@ -92,6 +94,7 @@ def traverse(node, graph, visited):
     for neighbor in neighbors:
         traverse(neighbor, graph, visited)
     return 1
+
 
 def traverse(node, graph, visited):
     if node in visited:
@@ -109,6 +112,7 @@ def traverse(node, graph, visited):
 
     return 1
 
+
 # https://www.structy.net/problems/largest-component
 def largest_component(graph):
     visited = set()
@@ -116,6 +120,7 @@ def largest_component(graph):
     for node, neighbors in graph.items():
         count = max(explore(node, graph, visited), count)
     return count
+
 
 def explore(node, graph, visited):
     if node in visited:
@@ -135,12 +140,14 @@ def explore(node, graph, visited):
             queue.append(neighbor)
     return count
 
+
 def largest_component(graph):
     visited = set()
     largest = 0
     for node in graph.keys():
         largest = max(largest, explore(node, graph, visited))
     return largest
+
 
 def explore(node, graph, visited):
     if node in visited:
@@ -150,6 +157,7 @@ def explore(node, graph, visited):
     for neighbor in graph[node]:
         size += explore(neighbor, graph, visited)
     return size
+
 
 # https://www.structy.net/problems/shortest-path
 def shortest_path(edges, src, dst):
@@ -182,6 +190,7 @@ def build_graph(edges):
 
     return dict(graph)
 
+
 # https://www.structy.net/problems/island-count
 def island_count(grid):
     visited = set()
@@ -192,11 +201,12 @@ def island_count(grid):
                 count += explore((row, col), grid, visited)
     return count
 
+
 def explore(node, grid, visited):
     row, col = node
     if grid[row][col] == 'W':
         return 0
-    stack = [ node ]
+    stack = [node]
     while stack:
         current = stack.pop()
         visited.add(current)
@@ -205,6 +215,7 @@ def explore(node, grid, visited):
             if neighbor not in visited:
                 stack.append(neighbor)
     return 1
+
 
 def get_neighbors(node, grid):
     row, col = node
@@ -223,6 +234,7 @@ def get_neighbors(node, grid):
     if col > 0 and grid[row][col - 1] == 'L':
         res.append(left)
 
+
 def minimum_island(grid):
     visited = set()
     minimum_length = float("inf")
@@ -236,6 +248,7 @@ def minimum_island(grid):
                 minimum_length = min(minimum_length, island_size)
 
     return minimum_length if found_land else 0
+
 
 def explore(node, grid, visited):
     row, col = node
@@ -256,6 +269,7 @@ def explore(node, grid, visited):
                 stack.append(neighbor)
     return length
 
+
 def get_neighbors(node, grid):
     row, col = node
     directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -268,11 +282,57 @@ def get_neighbors(node, grid):
 
     return neighbors
 
+# https://www.structy.net/problems/premium/closest-carrot
+def closest_carrot(grid, starting_row, starting_col):
+    queue = deque([(starting_row, starting_col, 0)])
+    visited = set()
+    while queue:
+        current_node = queue.popleft()
+        current_row, current_col, current_path_len = current_node
+
+        if grid[current_row][current_col] == 'C':
+            return current_path_len
+
+        visited.add((current_row, current_col))
+
+        neighbors = get_neighbors(grid, current_node)
+        for neighbor in neighbors:
+            if (neighbor[0], neighbor[1]) not in visited and grid[neighbor[0]][neighbor[1]] != 'X':
+                queue.append(neighbor)
+
+    return -1
+
+
+def get_neighbors(grid, node):
+    row, col, current_path_len = node
+
+    up = (row - 1, col, current_path_len + 1)
+    right = (row, col + 1, current_path_len + 1)
+    down = (row + 1, col, current_path_len + 1)
+    left = (row, col - 1, current_path_len + 1)
+
+    neighbors = []
+
+    if row > 0:
+        neighbors.append(up)
+    if col < len(grid[row]) - 1:
+        neighbors.append(right)
+    if row < len(grid) - 1:
+        neighbors.append(down)
+    if col > 0:
+        neighbors.append(left)
+
+    return neighbors
+
+
 grid = [
-  ['L', 'L', 'L'],
-  ['L', 'L', 'L'],
-  ['L', 'L', 'L'],
+    ['O', 'O', 'O', 'O', 'O'],
+    ['O', 'X', 'O', 'O', 'O'],
+    ['O', 'X', 'X', 'O', 'O'],
+    ['O', 'X', 'C', 'O', 'O'],
+    ['O', 'X', 'X', 'O', 'O'],
+    ['C', 'O', 'O', 'O', 'O'],
 ]
 
-res = minimum_island(grid)  # -> 9
-print(res)
+ans = closest_carrot(grid, 1, 2)
+print(ans)
