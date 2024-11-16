@@ -21,3 +21,20 @@ def reverse_string(s):
   if not s:
     return ''
   return reverse_string(s[1:]) + s[0]
+
+# https://www.structy.net/problems/premium/palindrome-recursive
+def palindrome(s):
+  if not s:
+    return True
+  if s[0] != s[-1]:
+    return False
+  else:
+    return palindrome(s[1:-1])
+
+# https://www.structy.net/problems/premium/fibonacci
+def fibonacci(n):
+  if n == 0:
+    return 0
+  if n <= 2:
+    return 1
+  return fibonacci(n - 1) + fibonacci(n - 2)
