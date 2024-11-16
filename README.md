@@ -1,3 +1,0 @@
-# CodeWorkout
-
-practice repo
