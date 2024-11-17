@@ -18,3 +18,10 @@ def create_linked_list(values):
     head = head.next
 
   return res
+
+def create_linked_list(values, i = 0):
+  if i == len(values):
+    return None
+  head = Node(values[i])
+  head.next = create_linked_list(values, i + 1)
+  return head
