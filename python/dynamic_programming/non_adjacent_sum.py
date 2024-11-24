@@ -17,3 +17,16 @@ def _non_adjacent_sum(nums, memo):
         memo[key] = max(with_first, without_first)
 
     return memo[key]
+
+# Without tuple
+def non_adjacent_sum(nums):
+  return _non_adjacent_sum(nums, 0, {})
+
+def _non_adjacent_sum(nums, i, memo):
+  if i >= len(nums):
+    return 0
+  if i not in memo:
+    include = nums[i] + _non_adjacent_sum(nums, i + 2, memo)
+    exclude = _non_adjacent_sum(nums, i + 1, memo)
+    memo[i] = max(include, exclude)
+  return memo[i]
